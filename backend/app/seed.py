@@ -60,10 +60,12 @@ def seed_db():
         raise e
 
 def seed_database(db: Session):
-    print("Re-creating tables...")
-    Base.metadata.drop_all(bind=engine)
-    Base.metadata.create_all(bind=engine)
+    print("Seeding database...")
+    # Don't seed twice
+    if db.query(models.Employee).first():
+        return "Database already seeded."
     seed_database_logic(db, close_session=False)
+    return "Database seeded successfully."
 
 def seed_database_logic(db: Session, close_session: bool = False):
     try:

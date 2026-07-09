@@ -7,5 +7,5 @@ router = APIRouter(prefix="/admin", tags=["admin"])
 
 @router.post("/seed")
 def seed(db: Session = Depends(get_db)):
-    seed_database(db)
-    return {"message": "Database seeded successfully."}
+    result = seed_database(db)
+    return {"message": result}
