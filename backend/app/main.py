@@ -5,7 +5,7 @@ from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from .database import engine, Base, get_db
-from .routes import employee, project, seat, dashboard, ai
+from .routes import employee, project, seat, dashboard, ai, admin
 
 app = FastAPI(
     title="Ethara Seat Allocation & Project Mapping System API",
@@ -51,3 +51,4 @@ app.include_router(project.router, prefix="/api")
 app.include_router(seat.router, prefix="/api")
 app.include_router(dashboard.router, prefix="/api")
 app.include_router(ai.router, prefix="/api")
+app.include_router(admin.router, prefix="/api")
