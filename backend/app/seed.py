@@ -53,6 +53,19 @@ def seed_db():
 
     db = SessionLocal()
     try:
+        seed_database_logic(db, close_session=True)
+    except Exception as e:
+        print(f"Error in seed_db: {e}")
+        raise e
+
+def seed_database(db: Session):
+    print("Re-creating tables...")
+    Base.metadata.drop_all(bind=engine)
+    Base.metadata.create_all(bind=engine)
+    seed_database_logic(db, close_session=False)
+
+def seed_database_logic(db: Session, close_session: bool = False):
+    try:
         print("Generating 100 Projects...")
         projects_data = []
         for i in range(1, 101):
@@ -191,7 +204,8 @@ def seed_db():
         print(f"Error seeding database: {e}")
         raise e
     finally:
-        db.close()
+        if close_session:
+            db.close()
 
 if __name__ == "__main__":
     seed_db()
