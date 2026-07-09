@@ -18,7 +18,13 @@ app = FastAPI(
 # Configure CORS for Frontend connectivity
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, specify the allowed domain (e.g. Vercel URL)
+    allow_origins=[
+        "https://ethara-seating-saas-1.onrender.com",
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "http://127.0.0.1:5173",
+        "http://127.0.0.1:5174"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
