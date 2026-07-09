@@ -7,6 +7,7 @@ from faker import Faker
 # Add parent directory to path so app can be imported
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
+from sqlalchemy.orm import Session
 from backend.app.database import engine, Base, SessionLocal
 from backend.app import models
 
