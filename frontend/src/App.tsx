@@ -88,7 +88,7 @@ function NavigationLayout() {
         </div>
 
         {/* Navigation Links */}
-        <nav className="flex-1 px-4 py-6 space-y-1">
+        <nav className="flex-1 px-4 py-6 space-y-2.5 md:space-y-1">
           {navItems.map(item => {
             const Icon = item.icon;
             const isActive = location.pathname === item.path;
@@ -97,14 +97,14 @@ function NavigationLayout() {
                 key={item.name}
                 to={item.path}
                 onClick={() => setSidebarOpen(false)}
-                className={`flex items-center justify-between px-4 py-3 rounded-xl font-medium text-sm transition-all duration-200 group
+                className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm transition-all duration-200 group
                   ${isActive 
-                    ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20 scale-[1.02]' 
-                    : 'text-muted-foreground hover:bg-muted hover:text-foreground hover:translate-x-1'
+                    ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/25 md:shadow-md md:shadow-primary/20 scale-[1.02] font-semibold md:font-medium' 
+                    : 'bg-white/40 dark:bg-black/25 backdrop-blur-md border border-border/30 shadow-sm text-foreground/90 font-semibold hover:bg-white/65 dark:hover:bg-black/45 md:bg-transparent md:dark:bg-transparent md:backdrop-blur-none md:border-transparent md:shadow-none md:text-muted-foreground md:font-medium md:hover:bg-muted md:hover:text-foreground md:hover:translate-x-1'
                   }`}
               >
                 <div className="flex items-center gap-3">
-                  <Icon size={18} className={isActive ? 'text-primary-foreground' : 'text-muted-foreground group-hover:text-foreground'} />
+                  <Icon size={18} className={isActive ? 'text-primary-foreground' : 'text-foreground/80 dark:text-foreground/90 md:text-muted-foreground md:group-hover:text-foreground'} />
                   <span>{item.name}</span>
                 </div>
                 {item.highlight && !isActive && (
