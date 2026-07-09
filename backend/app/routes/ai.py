@@ -171,16 +171,38 @@ def _call_llm(system_prompt: str, user_message: str, history: list = None) -> st
     # Try Groq first (fastest)
     if GROQ_API_KEY:
         try:
-            client = _create_openai_client(GROQ_API_KEY, "https://api.groq.com/openai/v1")
-            response = client.chat.completions.create(
-                model=GROQ_MODEL,
-                messages=messages,
-                temperature=0.1,
-                max_tokens=1024
-            )
-            return response.choices[0].message.content.strip()
+            import groq
+            # Strip proxy environment variables to prevent httpx constructor exceptions on Render
+            proxy_keys = ["http_proxy", "https_proxy", "all_proxy", "HTTP_PROXY", "HTTPS_PROXY", "ALL_PROXY"]
+            saved = {}
+            for k in proxy_keys:
+                if k in os.environ:
+                    saved[k] = os.environ.pop(k)
+            try:
+                client = groq.Groq(api_key=GROQ_API_KEY)
+                response = client.chat.completions.create(
+                    model=GROQ_MODEL,
+                    messages=messages,
+                    temperature=0.1,
+                    max_tokens=1024
+                )
+                return response.choices[0].message.content.strip()
+            finally:
+                for k, v in saved.items():
+                    os.environ[k] = v
         except Exception as e:
-            print(f"[AI] Groq error: {e}")
+            print(f"[AI] Official Groq client error: {e}. Trying fallback...")
+            try:
+                client = _create_openai_client(GROQ_API_KEY, "https://api.groq.com/openai/v1")
+                response = client.chat.completions.create(
+                    model=GROQ_MODEL,
+                    messages=messages,
+                    temperature=0.1,
+                    max_tokens=1024
+                )
+                return response.choices[0].message.content.strip()
+            except Exception as fe:
+                print(f"[AI] Groq fallback error: {fe}")
 
     # Try OpenAI
     if OPENAI_API_KEY:
